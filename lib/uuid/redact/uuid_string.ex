@@ -1,4 +1,4 @@
-defmodule Uuid.Redact.String do
+defmodule Uuid.Redact.StringParse do
   @moduledoc false
 
   # The first segment is 7 characters long instead of 8 as at least one char has already been read from the input string

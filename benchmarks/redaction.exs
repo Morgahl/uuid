@@ -14,32 +14,30 @@ redact_slug = ":id"
 
 Benchee.run(
   %{
-    "Charlist.redact/1" => fn {input, _redact_slug} -> Uuid.Redact.Charlist.redact(input) end,
     "Charlist.redact/2" => fn {input, redact_slug} -> Uuid.Redact.Charlist.redact(input, redact_slug) end,
-    "Charlist2.redact/1" => fn {input, _redact_slug} -> Uuid.Redact.Charlist2.redact(input) end,
     "Charlist2.redact/2" => fn {input, redact_slug} -> Uuid.Redact.Charlist2.redact(input, redact_slug) end,
     "NimbleParsec.redact!/1" => fn {input, _redact_slug} -> Uuid.Redact.NimbleParsec.redact!(input) end,
-    "NimbleParsec2.redact!/1" => fn {input, _redact_slug} -> Uuid.Redact.NimbleParsec2.redact!(input) end,
-    # "Parse.parse/1" => fn {input, _redact_slug} -> Uuid.Redact.Parse.parse(input) end,
-    # "Parse.parse/2" => fn {input, redact_slug} -> Uuid.Redact.Parse.parse(input, redact_slug) end,
-    # "String.redact/1" => fn {input, _redact_slug} -> Uuid.Redact.String.redact(input) end,
-    # "String.redact/2" => fn {input, redact_slug} -> Uuid.Redact.String.redact(input, redact_slug) end,
-    "RegEx.redact/1" => fn {input, _redact_slug} -> Uuid.Redact.RegEx.redact(input) end,
-    "RegEx.redact/2" => fn {input, redact_slug} -> Uuid.Redact.RegEx.redact(input, redact_slug) end
+    "Parse.parse/2" => fn {input, redact_slug} -> Uuid.Redact.Parse.parse(input, redact_slug) end,
+    "RegEx.redact/2" => fn {input, redact_slug} -> Uuid.Redact.RegEx.redact(input, redact_slug) end,
+    "StringParse.redact/2" => fn {input, redact_slug} -> Uuid.Redact.StringParse.redact(input, redact_slug) end
   },
   inputs: %{
-    "Concated UUIDs (--1x)" => {test_concated, redact_slug},
-    # "Concated UUIDs (-10x)" => {String.duplicate(test_concated, 10), redact_slug},
-    # "Concated UUIDs (100x)" => {String.duplicate(test_concated, 100), redact_slug},
-    "No Match (--1x)" => {test_no_match, redact_slug},
-    # "No Match (-10x)" => {String.duplicate(test_no_match, 10), redact_slug},
-    # "No Match (100x)" => {String.duplicate(test_no_match, 100), redact_slug},
-    "Plain English (--1x)" => {test_plain_en, redact_slug},
-    # "Plain English (-10x)" => {String.duplicate(test_plain_en, 10), redact_slug},
-    # "Plain English (100x)" => {String.duplicate(test_plain_en, 100), redact_slug},
-    "URL Path (--1x)" => {test_url_path, redact_slug}
-    # "URL Path (-10x)" => {String.duplicate(test_url_path, 10), redact_slug},
-    # "URL Path (100x)" => {String.duplicate(test_url_path, 100), redact_slug}
+    "Concated UUIDs (   1x)" => {test_concated, redact_slug},
+    "Concated UUIDs (  10x)" => {String.duplicate(test_concated, 10), redact_slug},
+    "Concated UUIDs ( 100x)" => {String.duplicate(test_concated, 100), redact_slug},
+    "Concated UUIDs (1000x)" => {String.duplicate(test_concated, 1000), redact_slug},
+    "No Match (   1x)" => {test_no_match, redact_slug},
+    "No Match (  10x)" => {String.duplicate(test_no_match, 10), redact_slug},
+    "No Match ( 100x)" => {String.duplicate(test_no_match, 100), redact_slug},
+    "No Match (1000x)" => {String.duplicate(test_no_match, 1000), redact_slug},
+    "Plain English (   1x)" => {test_plain_en, redact_slug},
+    "Plain English (  10x)" => {String.duplicate(test_plain_en, 10), redact_slug},
+    "Plain English ( 100x)" => {String.duplicate(test_plain_en, 100), redact_slug},
+    "Plain English (1000x)" => {String.duplicate(test_plain_en, 1000), redact_slug},
+    "URL Path (   1x)" => {test_url_path, redact_slug},
+    "URL Path (  10x)" => {String.duplicate(test_url_path, 10), redact_slug},
+    "URL Path ( 100x)" => {String.duplicate(test_url_path, 100), redact_slug},
+    "URL Path (1000x)" => {String.duplicate(test_url_path, 1000), redact_slug}
   },
   warmup: 1,
   time: 5,
@@ -56,6 +54,3 @@ Benchee.run(
      """}
   ]
 )
-
-# 1. break out each segment of the uuid of parsing into it's own function....
-# 2. worry about a single separater parser function later

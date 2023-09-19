@@ -27,3 +27,6 @@ uuid-*.tar
 
 # Ignore ElixirLS cache directory
 .elixir_ls/
+
+bench_output/*
+!bench_output/*.md

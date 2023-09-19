@@ -21,16 +21,12 @@ defmodule Uuid.Redact.Charlist do
   defp redact([], acc, _), do: acc
 
   defp redact([c | rest], acc, redact_as) when c in @hex do
-    case scan_uuid(rest, @segments, 0) do
+    case scan_uuid(rest, @segments) do
       :match ->
         redact(Enum.drop(rest, @uuid_len), [redact_as | acc], redact_as)
 
-      {:no_match, 0} ->
+      :no_match ->
         redact(rest, [c | acc], redact_as)
-
-      {:no_match, offset} ->
-        {read, rest} = Enum.split(rest, offset)
-        redact(rest, [[c | read] | acc], redact_as)
     end
   end
 
@@ -45,13 +41,22 @@ defmodule Uuid.Redact.Charlist do
     end
   end
 
-  defp scan_uuid(_, [0], @uuid_len), do: :match
-  defp scan_uuid([@separator | rest], [0 | tail], offset), do: scan_uuid(rest, tail, offset + 1)
-  defp scan_uuid([_ | _], [0 | _], offset), do: {:no_match, offset}
-  defp scan_uuid([c | rest], [n | tail], offset) when c in @hex, do: scan_uuid(rest, [n - 1 | tail], offset + 1)
-  defp scan_uuid([_ | _], _, offset), do: {:no_match, offset}
+  defp scan_uuid(_, [0]), do: :match
+  defp scan_uuid([@separator | rest], [0 | tail]), do: scan_uuid(rest, tail)
+  defp scan_uuid([_ | _], [0 | _]), do: :no_match
+  defp scan_uuid([c | rest], [n | tail]) when c in @hex, do: scan_uuid(rest, [n - 1 | tail])
+  defp scan_uuid([_ | _], _), do: :no_match
 
   defp scan_non_uuid([], offset), do: offset
-  defp scan_non_uuid([c | _], offset) when c in [@separator | @hex], do: offset
-  defp scan_non_uuid([_ | rest], offset), do: scan_non_uuid(rest, offset + 1)
+  defp scan_non_uuid([c | rest], offset) when c not in [@separator | @hex], do: scan_non_uuid(rest, offset + 1)
+
+  defp scan_non_uuid([_ | rest], offset) do
+    case scan_uuid(rest, @segments) do
+      :match ->
+        offset
+
+      :no_match ->
+        scan_non_uuid(rest, offset + 1)
+    end
+  end
 end

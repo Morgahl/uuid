@@ -2,20 +2,23 @@ defmodule Uuid.Redact.NimbleParsec do
   @moduledoc false
   import NimbleParsec
 
-  @hex_ranges [?0..?9, ?A..?F, ?a..?f]
-  @segments [8, 4, 4, 4, 12]
-  @sep_ranges [?-]
+  @nums ?0..?9
+  @hex_upper ?A..?F
+  @hex_lower ?a..?f
+  @hex_ranges [@nums, @hex_upper, @hex_lower]
+  @sep ?-
+  @sep_ranges [@sep]
 
   uuid =
-    ascii_string(@hex_ranges, @segments |> Enum.at(0))
+    ascii_string(@hex_ranges, 8)
     |> ascii_char(@sep_ranges)
-    |> ascii_string(@hex_ranges, @segments |> Enum.at(1))
+    |> ascii_string(@hex_ranges, 4)
     |> ascii_char(@sep_ranges)
-    |> ascii_string(@hex_ranges, @segments |> Enum.at(2))
+    |> ascii_string(@hex_ranges, 4)
     |> ascii_char(@sep_ranges)
-    |> ascii_string(@hex_ranges, @segments |> Enum.at(3))
+    |> ascii_string(@hex_ranges, 4)
     |> ascii_char(@sep_ranges)
-    |> ascii_string(@hex_ranges, @segments |> Enum.at(4))
+    |> ascii_string(@hex_ranges, 12)
 
   defparsecp :uuid,
              uuid |> eventually(),
