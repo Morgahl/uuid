@@ -45,7 +45,7 @@ defmodule Uuid.Redact.Charlist do
   defp scan_uuid([@separator | rest], [0 | tail]), do: scan_uuid(rest, tail)
   defp scan_uuid([_ | _], [0 | _]), do: :no_match
   defp scan_uuid([c | rest], [n | tail]) when c in @hex, do: scan_uuid(rest, [n - 1 | tail])
-  defp scan_uuid([_ | _], _), do: :no_match
+  defp scan_uuid(_, _), do: :no_match
 
   defp scan_non_uuid([], offset), do: offset
   defp scan_non_uuid([c | rest], offset) when c not in [@separator | @hex], do: scan_non_uuid(rest, offset + 1)

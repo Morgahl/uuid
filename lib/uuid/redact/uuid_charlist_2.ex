@@ -17,12 +17,6 @@ defmodule Uuid.Redact.Charlist2 do
   defguardp in_hex(c) when c in @nums or c in @upper_hex or c in @lower_hex
   defguardp not_in_sep_or_hex(c) when c != @separator and not in_hex(c)
 
-  defmacro in_set(c, set) do
-    quote do
-      unquote(c) in unquote(set)
-    end
-  end
-
   def redact(input, redact_as \\ @redact_as),
     do:
       input

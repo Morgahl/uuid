@@ -25,7 +25,6 @@ defmodule Uuid.MixProject do
       {:benchee_html, "~> 1.0", only: :dev},
       {:benchee_markdown, "~> 0.3", only: :dev},
       {:benchee, "~> 1.0", only: :dev},
-      {:ecto_sql, "~> 3.10"},
       {:nimble_parsec, "~> 1.0"}
     ]
   end
